@@ -6,3 +6,5 @@ deploy-to-supabase.js
 build-edge-function.mjs
 package.json
 package-lock.json
+.vercel
+.env*

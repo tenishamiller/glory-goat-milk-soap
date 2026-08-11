@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Glory Goat Admin</title>
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ops.css?v=13">
+  <link rel="stylesheet" href="mobile.css?v=1" media="(max-width: 768px)">
+</head>
+<body>
+  <div id="access-gate" class="gate">
+    <div class="gate-card">
+      <img src="assets/glory-goat-hero.png" alt="" class="gate-goat">
+      <h1>Glory Goat Admin</h1>
+      <p>Enter your access code to manage email, orders, and inventory.</p>
+      <form id="access-form">
+        <label for="access-code">Access code</label>
+        <input id="access-code" type="password" autocomplete="current-password" placeholder="Your access code" required>
+        <button type="submit">Enter</button>
+        <p class="error hidden" id="access-error"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="admin-app" class="admin-app hidden">
+    <header class="admin-header">
+      <div>
+        <p class="eyebrow">Glory Goat Milk Soap</p>
+        <h1>Admin</h1>
+      </div>
+      <a href="/" class="back-link">← Back to shop</a>
+    </header>
+
+    <nav class="admin-nav" aria-label="Admin sections">
+      <button type="button" class="admin-nav-btn active" data-admin-tab="email">Email</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="orders">Orders</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="reviews">Reviews</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="blocked">Blocked</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="inventory">Inventory</button>
+      <button type="button" class="admin-nav-btn" data-admin-tab="curing">Curing Soap</button>
+    </nav>
+
+    <main class="admin-dashboard">
+      <section class="admin-panel panel panel-email active" data-admin-panel="email">
+        <div class="panel-head">
+          <div>
+            <h2>Customer Email</h2>
+            <p class="hint">Contact form submissions and email replies. Move old threads to trash, or delete them permanently.</p>
+          </div>
+          <div class="mailbox-tabs" role="tablist" aria-label="Mailbox">
+            <button type="button" class="mailbox-tab active" data-mailbox="inbox" role="tab" aria-selected="true">Inbox</button>
+            <button type="button" class="mailbox-tab" data-mailbox="trash" role="tab" aria-selected="false">Trash</button>
+          </div>
+        </div>
+
+        <div class="email-layout">
+          <aside class="email-list-wrap">
+            <div class="email-list-toolbar">
+              <label class="select-all-label">
+                <input type="checkbox" id="select-all-tickets" aria-label="Select all messages">
+                <span>Select all</span>
+              </label>
+              <span id="selected-count" class="selected-count hidden">0 selected</span>
+              <div id="bulk-actions" class="bulk-actions hidden">
+                <button type="button" id="bulk-archive" class="btn-secondary">Move to trash</button>
+                <button type="button" id="bulk-restore" class="btn-secondary hidden">Restore</button>
+                <button type="button" id="bulk-delete" class="btn-danger">Delete permanently</button>
+              </div>
+            </div>
+            <div id="ticket-list" class="ticket-list" aria-label="Message list"></div>
+          </aside>
+
+          <div class="email-detail-wrap">
+            <div id="ticket-empty" class="ticket-empty">
+              <p>Select a message to read and reply.</p>
+            </div>
+
+            <div id="ticket-thread" class="ticket-thread hidden">
+              <div class="thread-head">
+                <div class="thread-head-main">
+                  <h3 id="thread-subject"></h3>
+                  <p id="thread-meta" class="meta"></p>
+                  <p id="thread-date" class="meta"></p>
+                </div>
+                <div class="thread-actions">
+                  <button type="button" id="block-ticket-customer" class="btn-danger">Block customer</button>
+                  <button type="button" id="archive-ticket" class="btn-secondary">Move to trash</button>
+                  <button type="button" id="restore-ticket" class="btn-secondary hidden">Restore</button>
+                  <button type="button" id="delete-ticket-permanent" class="btn-danger">Delete permanently</button>
+                </div>
+              </div>
+
+              <div id="thread-messages" class="thread-messages"></div>
+
+              <form id="reply-form" class="reply-form">
+                <label for="reply-body">Reply to customer</label>
+                <textarea id="reply-body" rows="5" required placeholder="Write your reply…"></textarea>
+                <button type="submit">Send reply</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-panel panel panel-orders hidden" data-admin-panel="orders">
+        <div class="orders-head">
+          <h2>Orders</h2>
+          <div class="orders-tabs" role="tablist" aria-label="Order type">
+            <button type="button" class="orders-tab active" data-orders-tab="pickup" role="tab" aria-selected="true">Raleigh, NC Pickup</button>
+            <button type="button" class="orders-tab" data-orders-tab="ship" role="tab" aria-selected="false">Ship</button>
+          </div>
+        </div>
+        <p class="hint" id="orders-hint">Raleigh, NC Pickup: 3 days from the ready email to collect (weekends included). Refund manually in Stripe if not picked up.</p>
+        <div id="order-list" class="order-list"></div>
+      </section>
+
+      <section class="admin-panel panel panel-reviews hidden" data-admin-panel="reviews">
+        <h2>Product Reviews</h2>
+        <p class="hint">Delete reviews that are fake, harmful, dishonest, or vulgar. Verified customers receive a review invite about 1 month after purchase.</p>
+        <div id="admin-reviews-list" class="admin-reviews-list"></div>
+      </section>
+
+      <section class="admin-panel panel panel-blocked hidden" data-admin-panel="blocked">
+        <h2>Blocked Customers</h2>
+        <p class="hint">Blocked customers cannot place orders — payments are automatically refunded — and cannot use the contact form.</p>
+
+        <form id="block-customer-form" class="block-form">
+          <div class="block-form-grid">
+            <div>
+              <label for="block-email">Email</label>
+              <input id="block-email" type="email" required placeholder="customer@example.com">
+            </div>
+            <div>
+              <label for="block-reason">Reason (optional)</label>
+              <input id="block-reason" type="text" placeholder="Why they were blocked">
+            </div>
+          </div>
+          <button type="submit">Block customer</button>
+        </form>
+
+        <div id="blocked-list" class="blocked-list"></div>
+      </section>
+
+      <section class="admin-panel panel panel-inventory hidden" data-admin-panel="inventory">
+        <h2>Inventory</h2>
+        <p class="hint">Leave count blank for unlimited stock. When count hits 0, Buy Now stops automatically.</p>
+        <div id="product-list" class="product-list"></div>
+      </section>
+
+      <section class="admin-panel panel panel-curing hidden" data-admin-panel="curing">
+        <h2>Curing Soap</h2>
+        <p class="hint">Control the Classic Glory Bar curing notice on the shop and product page. Turn this off when bars are ready to sell.</p>
+        <form id="curing-form" class="curing-form">
+          <label class="meta curing-toggle">
+            <input type="checkbox" id="curing-active" name="is_curing">
+            Show as currently curing (disables Buy Now for soap)
+          </label>
+          <div class="curing-field">
+            <label for="curing-ready-date">Ready date</label>
+            <input id="curing-ready-date" name="ready_date" type="date" required>
+          </div>
+          <p class="meta" id="curing-preview"></p>
+          <button type="submit">Save curing settings</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="/" data-m-nav="home"><span class="m-nav-icon" aria-hidden="true">⌂</span>Home</a>
+    <a href="/#why" data-m-nav="why"><span class="m-nav-icon" aria-hidden="true">✦</span>Why</a>
+    <a href="/#shop" data-m-nav="shop"><span class="m-nav-icon" aria-hidden="true">◆</span>Shop</a>
+    <a href="/ops.html" data-m-nav="admin"><span class="m-nav-icon" aria-hidden="true">⚙</span>Admin</a>
+    <a href="/#contact" data-m-nav="contact"><span class="m-nav-icon" aria-hidden="true">✉</span>Contact</a>
+  </nav>
+
+  <script src="ops.js?v=14"></script>
+  <script src="mobile.js"></script>
+</body>
+</html>

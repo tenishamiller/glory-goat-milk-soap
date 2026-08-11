@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Email previews — Glory Goat Milk Soap</title>
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Source Sans 3", Arial, sans-serif;
+      background: linear-gradient(180deg, #dce8d6, #f5f0e8);
+      color: #3d342b;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    h1 {
+      color: #2f4f2f;
+      margin: 0 0 8px;
+    }
+    .lead {
+      color: #6b5d52;
+      margin: 0 0 20px;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tabs a {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: #faf8f4;
+      border: 1px solid #e8dfd0;
+      color: #3d6b34;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .tabs a.active {
+      background: #3d6b34;
+      color: #fff;
+      border-color: #3d6b34;
+    }
+    .frame-wrap {
+      background: #faf8f4;
+      border: 1px solid #e8dfd0;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 32px rgba(45, 35, 25, 0.1);
+    }
+    iframe {
+      display: block;
+      width: 100%;
+      min-height: 920px;
+      border: 0;
+      background: #dce8d6;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Email notification previews</h1>
+    <p class="lead">These are the exact HTML templates sent through Resend.</p>
+    <nav class="tabs" id="tabs">
+      <a href="?type=back-in-stock" data-type="back-in-stock" class="active">Back in stock</a>
+      <a href="?type=back-in-stock-creme" data-type="back-in-stock-creme">Back in stock (Cream)</a>
+      <a href="?type=contact-confirmation" data-type="contact-confirmation">Contact confirmation</a>
+      <a href="?type=contact-reply" data-type="contact-reply">Reply to customer</a>
+    </nav>
+    <div class="frame-wrap">
+      <iframe id="preview" title="Email preview" src="/api/email-preview?type=back-in-stock"></iframe>
+    </div>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get("type") || "back-in-stock";
+    const iframe = document.getElementById("preview");
+    iframe.src = `/api/email-preview?type=${encodeURIComponent(type)}`;
+    document.querySelectorAll(".tabs a").forEach((link) => {
+      link.classList.toggle("active", link.dataset.type === type);
+    });
+  </script>
+</body>
+</html>

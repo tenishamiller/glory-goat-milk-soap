@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write a Review — Glory Goat Milk Soap</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=12">
+</head>
+<body class="review-page">
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <nav class="nav">
+      <a class="brand" href="/">Glory Goat Milk Soap</a>
+    </nav>
+  </header>
+
+  <main class="section panel-cream review-page-main">
+    <div class="wrap review-page-wrap">
+      <div id="review-loading" class="review-state">
+        <p>Loading your review invitation…</p>
+      </div>
+
+      <div id="review-error" class="review-state hidden">
+        <h1>Review unavailable</h1>
+        <p id="review-error-text" class="review-lead"></p>
+        <a class="btn btn-primary" href="/">Back to shop</a>
+      </div>
+
+      <div id="review-done" class="review-state hidden">
+        <h1>Thank you!</h1>
+        <p class="review-lead">Your review has been published. We appreciate you taking the time to share your experience.</p>
+        <a class="btn btn-primary" id="review-done-link" href="/">View the product</a>
+      </div>
+
+      <div id="review-already" class="review-state hidden">
+        <h1>Review already submitted</h1>
+        <p class="review-lead">You've already shared your thoughts on this order. Thank you!</p>
+        <a class="btn btn-primary" id="review-already-link" href="/">View the product</a>
+      </div>
+
+      <div id="review-form-wrap" class="review-state hidden">
+        <p class="eyebrow">Verified purchase</p>
+        <h1>Share your experience</h1>
+        <p class="review-lead">Tell us what you think of <strong id="review-product-label"></strong>.</p>
+
+        <form class="form review-page-form" id="review-page-form">
+          <p class="meta" id="review-customer-line"></p>
+
+          <fieldset class="review-stars-field">
+            <legend>Rating</legend>
+            <div class="review-stars" id="review-page-stars">
+              <label><input type="radio" name="rating" value="5" required><span aria-hidden="true">★</span><span class="sr-only">5 stars</span></label>
+              <label><input type="radio" name="rating" value="4"><span aria-hidden="true">★</span><span class="sr-only">4 stars</span></label>
+              <label><input type="radio" name="rating" value="3"><span aria-hidden="true">★</span><span class="sr-only">3 stars</span></label>
+              <label><input type="radio" name="rating" value="2"><span aria-hidden="true">★</span><span class="sr-only">2 stars</span></label>
+              <label><input type="radio" name="rating" value="1"><span aria-hidden="true">★</span><span class="sr-only">1 star</span></label>
+            </div>
+          </fieldset>
+
+          <label for="review-page-body">Your review</label>
+          <textarea id="review-page-body" name="body" rows="6" placeholder="What did you love? How did it feel on your skin?" required maxlength="2000"></textarea>
+
+          <label for="review-page-photo">Photo (optional)</label>
+          <input id="review-page-photo" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+          <p class="meta review-photo-hint">JPG, PNG, WebP, or GIF · 2 MB max</p>
+          <div id="review-photo-preview" class="review-photo-preview hidden">
+            <img id="review-photo-preview-img" alt="Selected review photo preview">
+            <button type="button" class="text-btn" id="review-photo-clear">Remove photo</button>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Submit review</button>
+          <p class="form-status hidden" id="review-page-status" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-brand"><a href="/">Glory Goat Milk Soap</a></p>
+      <p class="footer-copy">&copy; 2026 glorygoatmilksoap.com · Handmade with care</p>
+    </div>
+  </footer>
+
+  <script src="/review.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "crons": [
+    {
+      "path": "/api/reviews?cron=send-invites",
+      "schedule": "0 15 * * *"
+    }
+  ],
+  "functions": {
+    "api/create-checkout.js": { "maxDuration": 10 },
+    "api/stripe-config.js": { "maxDuration": 5 },
+    "api/stripe-webhook.js": { "maxDuration": 10 },
+    "api/inbound-email.js": { "maxDuration": 10 },
+    "api/contact.js": { "maxDuration": 10 },
+    "api/reviews.js": { "maxDuration": 30 },
+    "api/admin/tickets.js": { "maxDuration": 10 },
+    "api/admin/products.js": { "maxDuration": 10 },
+    "api/admin/curing.js": { "maxDuration": 10 },
+    "api/admin/orders.js": { "maxDuration": 30 }
+  }
+}

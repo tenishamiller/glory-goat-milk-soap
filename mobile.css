@@ -1,0 +1,398 @@
+/* Glory Goat — mobile-only layout (max-width 768px) */
+
+:root {
+  --m-nav-h: 4.25rem;
+  --m-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html {
+  scroll-padding-bottom: calc(var(--m-nav-h) + var(--m-safe-bottom) + 1rem);
+}
+
+body {
+  padding-bottom: calc(var(--m-nav-h) + var(--m-safe-bottom));
+}
+
+.page-bg {
+  filter: saturate(0.75) brightness(1.08);
+}
+
+/* ── Header: logo only ── */
+.site-header {
+  position: sticky;
+  top: 0;
+}
+
+.site-header .nav {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0.7rem 1rem;
+}
+
+.site-header .nav-menu {
+  display: none;
+}
+
+.site-header .brand {
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+/* ── Bottom tab bar ── */
+.mobile-bottom-nav {
+  display: flex;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+  height: calc(var(--m-nav-h) + var(--m-safe-bottom));
+  padding-bottom: var(--m-safe-bottom);
+  background: rgba(47, 79, 47, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(201, 166, 107, 0.35);
+  box-shadow: 0 -8px 28px rgba(20, 30, 15, 0.22);
+}
+
+.mobile-bottom-nav a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.45rem 0.2rem 0.35rem;
+  text-decoration: none;
+  color: rgba(245, 240, 232, 0.72);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 0.15s ease;
+}
+
+.mobile-bottom-nav a .m-nav-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.mobile-bottom-nav a.is-active,
+.mobile-bottom-nav a:active {
+  color: var(--gold-soft);
+}
+
+/* ── Hero ── */
+.hero {
+  padding: 1.25rem 0.85rem 2rem;
+}
+
+.hero-wrap {
+  padding: 0;
+}
+
+.hero-scripture {
+  margin-bottom: 1.25rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.88rem;
+}
+
+.hero-scripture p {
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.hero-grid {
+  grid-template-columns: 1fr;
+  gap: 1.15rem;
+}
+
+.hero-visual {
+  order: -1;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.hero-copy {
+  padding: 1.15rem 1rem;
+  text-align: center;
+}
+
+.hero-copy h1 {
+  font-size: clamp(1.85rem, 8vw, 2.25rem);
+}
+
+.hero-copy .intro {
+  font-size: 0.98rem;
+}
+
+.hero-actions {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.65rem;
+}
+
+.hero-actions .btn {
+  width: 100%;
+  justify-content: center;
+  min-height: 2.85rem;
+}
+
+/* ── Sections ── */
+.section {
+  padding: 2.25rem 0.85rem;
+}
+
+.section-head {
+  margin-bottom: 1.35rem;
+  text-align: center;
+}
+
+.section-head h2,
+.section h2 {
+  font-size: clamp(1.65rem, 7vw, 2rem);
+}
+
+.section-lead {
+  font-size: 0.95rem;
+}
+
+.about-prose p,
+.product-prose p {
+  font-size: 0.98rem;
+  line-height: 1.72;
+}
+
+.about-scripture {
+  padding: 1rem;
+  margin: 1.25rem 0;
+}
+
+/* ── Shop cards ── */
+.cards {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.card {
+  padding: 1.25rem 1.1rem 1.1rem;
+}
+
+.card h3 {
+  font-size: 1.25rem;
+}
+
+.card .btn,
+.card-product .btn-buy,
+.card-product .btn-details {
+  width: 100%;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
+}
+
+.size-select,
+.notify-email {
+  font-size: 16px;
+  min-height: 2.75rem;
+}
+
+/* ── Why ── */
+.why-showcase {
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  padding: 1.15rem;
+  text-align: center;
+}
+
+.why-lather-video {
+  max-width: min(100%, 280px);
+}
+
+.why-chips {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.why-chips li {
+  padding: 0.75rem 0.4rem;
+  font-size: 0.68rem;
+}
+
+.why-header {
+  margin-bottom: 1.5rem;
+}
+
+/* ── Contact ── */
+.contact-grid {
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.form input,
+.form textarea {
+  font-size: 16px;
+}
+
+.form .btn-primary {
+  width: 100%;
+  min-height: 2.85rem;
+}
+
+/* ── Footer ── */
+.site-footer {
+  padding: 1.5rem 1rem 1rem;
+}
+
+.site-footer .footer-copy {
+  font-size: 0.78rem;
+}
+
+/* ── Product pages ── */
+.product-hero-grid {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.product-visual {
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.product-buy-box {
+  position: sticky;
+  top: calc(3.25rem + var(--m-safe-bottom));
+  z-index: 20;
+  padding: 1.15rem;
+  background: rgba(250, 248, 244, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(45, 35, 25, 0.1);
+}
+
+.product-buy-box .btn-primary,
+.product-buy-box .btn-buy {
+  width: 100%;
+  min-height: 3rem;
+  font-size: 1rem;
+}
+
+.product-page .section {
+  padding: 2rem 0.85rem;
+}
+
+.ingredient-grid {
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.ingredient-card {
+  padding: 1rem 1.1rem;
+}
+
+.ingredient-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.ingredient-card p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.product-back {
+  display: inline-block;
+  margin-top: 0.75rem;
+}
+
+/* ── Admin (ops) ── */
+.admin-app {
+  padding: 1rem 0.75rem calc(var(--m-nav-h) + 1rem);
+}
+
+.admin-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.admin-header h1 {
+  font-size: 1.45rem;
+}
+
+.admin-nav {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  gap: 0.45rem;
+  padding-bottom: 0.35rem;
+  margin-bottom: 1rem;
+  scrollbar-width: none;
+}
+
+.admin-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-nav-btn {
+  flex: 0 0 auto;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.82rem;
+}
+
+.email-layout {
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.email-list-wrap {
+  max-height: 42vh;
+  border-radius: var(--radius);
+}
+
+.ticket-list {
+  max-height: 36vh;
+}
+
+.email-detail-wrap {
+  min-height: 50vh;
+}
+
+.panel-head {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.mailbox-tabs {
+  width: 100%;
+}
+
+.bulk-actions {
+  flex-wrap: wrap;
+}
+
+.gate-card {
+  margin: 1rem;
+  padding: 1.5rem 1.25rem;
+}
+
+.gate-card input {
+  font-size: 16px;
+}
+
+.reviews-list {
+  grid-template-columns: 1fr;
+}
+
+.orders-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.inventory-grid {
+  grid-template-columns: 1fr;
+}

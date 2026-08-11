@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Why section layout previews — Glory Goat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --beige: #f5f0e8;
+      --forest: #2f4f2f;
+      --forest-mid: #3d6b34;
+      --brown-soft: #6b5344;
+      --cream: #faf8f4;
+      --gold: #c9a66b;
+      --sage: #dce8d6;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "Source Sans 3", system-ui, sans-serif;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      color: #3d342b;
+      background: var(--beige);
+      line-height: 1.65;
+    }
+
+    .preview-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--forest);
+      color: var(--cream);
+      padding: 1rem 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .preview-header h1 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .preview-header p {
+      margin-top: 0.35rem;
+      font-size: 0.92rem;
+      opacity: 0.92;
+      max-width: 52rem;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+    }
+
+    .tab {
+      border: 0;
+      border-radius: 999px;
+      padding: 0.55rem 1rem;
+      font: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      background: rgba(255,255,255,0.14);
+      color: var(--cream);
+    }
+
+    .tab.is-active {
+      background: var(--cream);
+      color: var(--forest);
+    }
+
+    .compare-bar {
+      background: #fff8e7;
+      border-bottom: 2px solid var(--gold);
+      padding: 1rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 720px) {
+      .compare-bar { grid-template-columns: 1fr; }
+    }
+
+    .compare-box {
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+    }
+
+    .compare-box.bad {
+      background: #fef2f2;
+      border: 2px dashed #dc2626;
+    }
+
+    .compare-box.good {
+      background: #ecfdf5;
+      border: 2px solid var(--forest-mid);
+    }
+
+    .compare-box strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.95rem;
+    }
+
+    .panel {
+      display: none;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .panel.is-active { display: block; }
+
+    .panel-note {
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+      padding: 0.85rem 1rem;
+      background: rgba(250,248,244,0.9);
+      border-left: 4px solid var(--forest-mid);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 0.92rem;
+      color: var(--brown-soft);
+    }
+
+    .mock-section {
+      max-width: 920px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, var(--sage) 0%, rgba(220,232,214,0.6) 100%);
+      border-radius: 18px;
+      padding: 2rem 1.25rem 2.5rem;
+      border: 1px solid rgba(61,107,52,0.15);
+    }
+
+    .mock-section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2rem);
+      color: var(--forest);
+      text-align: center;
+      margin-bottom: 0.35rem;
+    }
+
+    .mock-lead {
+      text-align: center;
+      color: var(--brown-soft);
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    /* --- WRONG: center breaks (what we did before) --- */
+    .layout-wrong .block {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .layout-wrong p {
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      color: var(--brown-soft);
+    }
+
+    .layout-wrong .center-flower {
+      display: flex;
+      justify-content: center;
+      margin: 0.75rem auto 1rem;
+    }
+
+    .layout-wrong .center-flower img {
+      height: 100px;
+      opacity: 0.85;
+    }
+
+    .layout-wrong .label-wrong {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #dc2626;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    /* --- OPTION A: Editorial float beside text --- */
+    .layout-a .prose-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .layout-a .float-block {
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+    }
+
+    .layout-a .float-block img {
+      width: min(140px, 34vw);
+      height: auto;
+      opacity: 0.9;
+    }
+
+    .layout-a .float-left img {
+      float: left;
+      margin: 0.15rem 1.15rem 0.5rem 0;
+      transform: rotate(-6deg);
+    }
+
+    .layout-a .float-right img {
+      float: right;
+      margin: 0.15rem 0 0.5rem 1.15rem;
+      transform: rotate(7deg);
+    }
+
+    .layout-a p {
+      font-size: 0.95rem;
+      color: var(--brown-soft);
+      line-height: 1.75;
+    }
+
+    .side-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--forest-mid);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.15rem;
+    }
+
+    .side-label.right { text-align: right; }
+
+    /* --- OPTION B: Outside margin cascade --- */
+    .layout-b .cascade-wrap {
+      position: relative;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 0 0.5rem;
+    }
+
+    .layout-b .cascade-row {
+      position: relative;
+      margin-bottom: 2rem;
+      min-height: 5rem;
+    }
+
+    .layout-b .cascade-text {
+      position: relative;
+      z-index: 2;
+      background: rgba(250,248,244,0.72);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      font-size: 0.95rem;
+      color: var(--brown-soft);
+      line-height: 1.75;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    .layout-b .cascade-img {
+      position: absolute;
+      top: -0.5rem;
+      width: min(130px, 28vw);
+      z-index: 1;
+      opacity: 0.88;
+      pointer-events: none;
+    }
+
+    .layout-b .cascade-img.left {
+      left: min(-120px, -18vw);
+      transform: rotate(-8deg);
+    }
+
+    .layout-b .cascade-img.right {
+      right: min(-120px, -18vw);
+      transform: rotate(8deg);
+    }
+
+    @media (max-width: 680px) {
+      .layout-b .cascade-img.left { left: -0.5rem; top: -4.5rem; }
+      .layout-b .cascade-img.right { right: -0.5rem; top: -4.5rem; }
+      .layout-b .cascade-row { padding-top: 5rem; }
+    }
+
+    /* --- OPTION C: Two-column zigzag --- */
+    .layout-c .zigzag {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .layout-c .zig-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: center;
+    }
+
+    .layout-c .zig-row.reverse .zig-img { order: 2; }
+    .layout-c .zig-row.reverse .zig-text { order: 1; }
+
+    .layout-c .zig-img {
+      display: flex;
+      justify-content: center;
+    }
+
+    .layout-c .zig-img img {
+      width: min(160px, 80%);
+      transform: rotate(-5deg);
+    }
+
+    .layout-c .zig-row.reverse .zig-img img {
+      transform: rotate(6deg);
+    }
+
+    .layout-c .zig-text {
+      font-size: 0.95rem;
+      color: var(--brown-soft);
+      line-height: 1.75;
+      background: rgba(250,248,244,0.65);
+      padding: 1rem;
+      border-radius: var(--radius);
+    }
+
+    @media (max-width: 640px) {
+      .layout-c .zig-row {
+        grid-template-columns: 1fr;
+      }
+      .layout-c .zig-row.reverse .zig-img,
+      .layout-c .zig-row.reverse .zig-text { order: unset; }
+      .layout-c .zig-img img { width: 120px; }
+    }
+
+    .pick-banner {
+      max-width: 920px;
+      margin: 2rem auto 0;
+      padding: 1.25rem;
+      background: var(--cream);
+      border: 2px solid var(--forest-mid);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    .pick-banner p {
+      font-size: 0.95rem;
+      color: var(--brown-soft);
+    }
+
+    .pick-banner strong {
+      color: var(--forest);
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+    }
+
+    .diagram {
+      max-width: 520px;
+      margin: 0 auto 1.5rem;
+      padding: 1rem;
+      background: var(--cream);
+      border-radius: var(--radius);
+      font-family: monospace;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      white-space: pre;
+      color: #444;
+      border: 1px solid var(--gold);
+    }
+
+    .mockup-showcase {
+      max-width: 920px;
+      margin: 1.5rem auto 0;
+      padding: 0 1rem;
+    }
+
+    .mockup-showcase figure {
+      background: var(--cream);
+      border: 2px solid var(--forest-mid);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(47, 79, 47, 0.12);
+    }
+
+    .mockup-showcase img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .mockup-showcase figcaption {
+      padding: 0.85rem 1rem;
+      font-size: 0.92rem;
+      color: var(--brown-soft);
+      border-top: 1px solid rgba(201, 166, 107, 0.45);
+      background: rgba(250, 248, 244, 0.95);
+    }
+  </style>
+</head>
+<body>
+  <header class="preview-header">
+    <h1>Why Goat Milk — layout previews</h1>
+    <p>Pick the layout you want. Flowers sit <strong>beside</strong> the words (left or right), never stacked in the middle breaking the paragraph flow.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab is-active" type="button" data-panel="wrong">❌ What we did (wrong)</button>
+      <button class="tab" type="button" data-panel="a">Option A — float beside text</button>
+      <button class="tab" type="button" data-panel="b">Option B — cascade in margins</button>
+      <button class="tab" type="button" data-panel="c">Option C — zigzag columns</button>
+    </div>
+  </header>
+
+  <div class="compare-bar">
+    <div class="compare-box bad">
+      <strong>❌ Not this</strong>
+      Flower centered between paragraphs — interrupts reading, feels stuck in the middle.
+    </div>
+    <div class="compare-box good">
+      <strong>✓ What you described</strong>
+      Flower sits left or right of the words, text wraps around or runs beside it — cascading down the section.
+    </div>
+  </div>
+
+  <div class="mockup-showcase">
+    <figure>
+      <img src="assets/why-goat-milk-layout-mockup.png" alt="Mockup showing wildflowers beside Why Goat Milk paragraphs, not centered between them">
+      <figcaption><strong>Visual mockup</strong> — flowers cascade left and right beside the text (like Option A). Use the tabs below to compare three interactive layouts.</figcaption>
+    </figure>
+  </div>
+
+  <!-- WRONG -->
+  <section class="panel is-active" id="panel-wrong">
+    <p class="panel-note"><strong>Current mistake:</strong> Images placed in the center between paragraphs. You said this looks terrible — agreed for your vision.</p>
+    <div class="mock-section layout-wrong">
+      <h2>Why Goat Milk Soap?</h2>
+      <p class="mock-lead">Because what you wash your skin with matters.</p>
+      <div class="block">
+        <p>Many commercial soaps can leave your skin feeling tight, dry, or stripped. Goat milk soap is different. It produces a rich, creamy lather...</p>
+        <p class="label-wrong">Flower stuck in middle ↓</p>
+        <div class="center-flower"><img src="assets/wildflowers-accent-left.png" alt=""></div>
+        <p>Goat milk naturally contains fats, proteins, vitamins, and minerals that make it a wonderful addition to handmade soap...</p>
+        <p class="label-wrong">Another flower in middle ↓</p>
+        <div class="center-flower"><img src="assets/wildflowers-accent-right.png" alt=""></div>
+        <p>Goat milk also contains naturally occurring lactic acid...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION A -->
+  <section class="panel" id="panel-a">
+    <p class="panel-note"><strong>Option A — Editorial float:</strong> Small flower clusters float left on one paragraph, right on the next. Text wraps naturally beside them. Classic magazine layout.</p>
+    <pre class="diagram">  [🌸]  Paragraph text wraps around
+        the flower on the left side
+        and keeps reading here...
+
+        Paragraph on the next block
+        wraps on the left while    [🌸]
+        flower sits on the right →</pre>
+    <div class="mock-section layout-a">
+      <h2>Why Goat Milk Soap?</h2>
+      <p class="mock-lead">Because what you wash your skin with matters.</p>
+      <div class="prose-wrap">
+        <div class="float-block float-left">
+          <p class="side-label">Flower left ←</p>
+          <img src="assets/wildflowers-accent-left.png" alt="">
+          <p>Many commercial soaps can leave your skin feeling tight, dry, or stripped. Goat milk soap is different. It produces a rich, creamy lather that gently cleanses while helping your skin feel soft, smooth, and comfortable after every wash.</p>
+        </div>
+        <div class="float-block float-right">
+          <p class="side-label right">Flower right →</p>
+          <img src="assets/wildflowers-accent-right.png" alt="">
+          <p>Goat milk naturally contains fats, proteins, vitamins, and minerals that make it a wonderful addition to handmade soap. Its natural fats contribute to the soap's creamy texture and conditioning feel.</p>
+        </div>
+        <div class="float-block float-left">
+          <p class="side-label">Flower left ←</p>
+          <img src="assets/wildflowers-accent-left.png" alt="">
+          <p>Goat milk also contains naturally occurring lactic acid, a type of alpha hydroxy acid. Lactic acid is known for gently loosening dull, dead skin cells from the skin's surface.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION B -->
+  <section class="panel" id="panel-b">
+    <p class="panel-note"><strong>Option B — Cascade in margins:</strong> Text stays in a clean center column. Flowers hang off the left or right edge, staggered as you scroll — like they're growing beside the page.</p>
+    <pre class="diagram">[🌸]     ┌─────────────────┐
+         │  Paragraph text  │
+         └─────────────────┘
+              ┌─────────────────┐     [🌸]
+              │  Next paragraph  │
+              └─────────────────┘
+[🌸]     ┌─────────────────┐
+         │  Third paragraph │
+         └─────────────────┘</pre>
+    <div class="mock-section layout-b">
+      <h2>Why Goat Milk Soap?</h2>
+      <p class="mock-lead">Because what you wash your skin with matters.</p>
+      <div class="cascade-wrap">
+        <div class="cascade-row">
+          <img class="cascade-img left" src="assets/wildflowers-accent-left.png" alt="">
+          <div class="cascade-text">Many commercial soaps can leave your skin feeling tight, dry, or stripped. Goat milk soap is different. It produces a rich, creamy lather that gently cleanses while helping your skin feel soft, smooth, and comfortable.</div>
+        </div>
+        <div class="cascade-row">
+          <img class="cascade-img right" src="assets/wildflowers-accent-right.png" alt="">
+          <div class="cascade-text">Goat milk naturally contains fats, proteins, vitamins, and minerals that make it a wonderful addition to handmade soap. Its natural fats contribute to the soap's creamy texture and conditioning feel.</div>
+        </div>
+        <div class="cascade-row">
+          <img class="cascade-img left" src="assets/wildflowers-accent-left.png" alt="">
+          <div class="cascade-text">Goat milk also contains naturally occurring lactic acid, a type of alpha hydroxy acid — known for gently loosening dull, dead skin cells from the skin's surface.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPTION C -->
+  <section class="panel" id="panel-c">
+    <p class="panel-note"><strong>Option C — Zigzag:</strong> Each paragraph pairs with a flower in its own row — flower left, then flower right, alternating. Very clear side placement.</p>
+    <pre class="diagram">  [🌸]  |  Paragraph text
+        |  in right column
+
+        |  Paragraph text  |  [🌸]
+        |  in left column  |
+
+  [🌸]  |  Paragraph text
+        |  in right column</pre>
+    <div class="mock-section layout-c">
+      <h2>Why Goat Milk Soap?</h2>
+      <p class="mock-lead">Because what you wash your skin with matters.</p>
+      <div class="zigzag">
+        <div class="zig-row">
+          <div class="zig-img"><img src="assets/wildflowers-accent-left.png" alt=""></div>
+          <div class="zig-text">Many commercial soaps can leave your skin feeling tight, dry, or stripped. Goat milk soap is different. It produces a rich, creamy lather that gently cleanses.</div>
+        </div>
+        <div class="zig-row reverse">
+          <div class="zig-img"><img src="assets/wildflowers-accent-right.png" alt=""></div>
+          <div class="zig-text">Goat milk naturally contains fats, proteins, vitamins, and minerals that make it a wonderful addition to handmade soap.</div>
+        </div>
+        <div class="zig-row">
+          <div class="zig-img"><img src="assets/wildflowers-accent-left.png" alt=""></div>
+          <div class="zig-text">Goat milk also contains naturally occurring lactic acid — known for gently loosening dull, dead skin cells from the skin's surface.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pick-banner">
+    <p><strong>Which layout do you want?</strong></p>
+    <p style="margin-top:0.5rem">Reply with <strong>A</strong>, <strong>B</strong>, or <strong>C</strong> — or mix elements. Once you pick, I'll build it on the live Why section with your real copy.</p>
+  </div>
+
+  <script>
+    document.querySelectorAll(".tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach((t) => t.classList.remove("is-active"));
+        document.querySelectorAll(".panel").forEach((p) => p.classList.remove("is-active"));
+        tab.classList.add("is-active");
+        document.getElementById("panel-" + tab.dataset.panel).classList.add("is-active");
+      });
+    });
+  </script>
+</body>
+</html>
