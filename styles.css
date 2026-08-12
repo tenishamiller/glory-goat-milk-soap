@@ -1312,6 +1312,7 @@ main,
 
 .card-product .size-label,
 .card-product .size-select,
+.card-product .qty-select,
 .card-product .price,
 .card-product .stock-line,
 .card-product .btn,
@@ -1319,6 +1320,11 @@ main,
 .card-product .btn-details {
   position: relative;
   z-index: 2;
+}
+
+.qty-select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
 .btn-details {

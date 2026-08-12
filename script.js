@@ -11,11 +11,47 @@ function cremeProductKey() {
   return cremeProducts[cremeSize?.value || "8"];
 }
 
+const MAX_QTY = 10;
+
 function getFulfillment() {
   return document.getElementById("delivery-method")?.value || "ship";
 }
 
-async function goToCheckout(productKey, button) {
+function qtySelectFor(stockGroup) {
+  return document.querySelector(`[data-qty-for="${stockGroup}"]`);
+}
+
+function getQuantity(stockGroup) {
+  const n = Number.parseInt(qtySelectFor(stockGroup)?.value || "1", 10);
+  if (!Number.isFinite(n) || n < 1) return 1;
+  return Math.min(n, MAX_QTY);
+}
+
+function syncQuantityOptions(stockGroup, state) {
+  const select = qtySelectFor(stockGroup);
+  if (!select) return;
+
+  const curing = Boolean(state?.curing);
+  const tracked = state?.inventory_count != null;
+  const inStock = Boolean(state?.in_stock) && !curing;
+  let max = MAX_QTY;
+  if (tracked && state.auto_stop !== false && Number.isFinite(state.inventory_count)) {
+    max = Math.max(1, Math.min(MAX_QTY, state.inventory_count));
+  }
+
+  const current = Number.parseInt(select.value || "1", 10) || 1;
+  select.innerHTML = "";
+  for (let i = 1; i <= max; i += 1) {
+    const option = document.createElement("option");
+    option.value = String(i);
+    option.textContent = String(i);
+    if (i === Math.min(current, max)) option.selected = true;
+    select.appendChild(option);
+  }
+  select.disabled = !inStock;
+}
+
+async function goToCheckout(productKey, button, stockGroup) {
   try {
     if (!window.GloryCheckout?.open) {
       throw new Error("Checkout is still loading. Please try again.");
@@ -23,6 +59,7 @@ async function goToCheckout(productKey, button) {
     await window.GloryCheckout.open({
       product: productKey,
       fulfillment: getFulfillment(),
+      quantity: getQuantity(stockGroup || productKey),
       returnPath: "/",
       button,
     });
@@ -85,6 +122,8 @@ function applyProductUi(productKey, options = {}) {
     cardBuy.classList.toggle("hidden", !inStock && tracked && !curing);
   }
 
+  syncQuantityOptions(options.stockGroup || productKey, state);
+
   if (notifyBox) {
     notifyBox.classList.toggle("hidden", !tracked || inStock || curing);
   }
@@ -122,7 +161,7 @@ async function loadProducts() {
 }
 
 document.querySelectorAll(".btn-buy[data-product]").forEach((btn) => {
-  btn.addEventListener("click", () => goToCheckout(btn.dataset.product, btn));
+  btn.addEventListener("click", () => goToCheckout(btn.dataset.product, btn, btn.dataset.product));
 });
 
 if (cremeSize && cremePrice) {
@@ -134,7 +173,7 @@ if (cremeSize && cremePrice) {
 
 if (cremeBuy && cremeSize) {
   cremeBuy.addEventListener("click", () => {
-    goToCheckout(cremeProductKey(), cremeBuy);
+    goToCheckout(cremeProductKey(), cremeBuy, "creme");
   });
 }
 

@@ -100,7 +100,13 @@ async function closeCheckoutModal() {
   document.body.classList.remove("checkout-open");
 }
 
-async function openEmbeddedCheckout({ product, fulfillment, returnPath, button }) {
+function normalizeQuantity(value) {
+  const n = Number.parseInt(value, 10);
+  if (!Number.isFinite(n) || n < 1) return 1;
+  return Math.min(n, 20);
+}
+
+async function openEmbeddedCheckout({ product, fulfillment, quantity, returnPath, button }) {
   const originalText = button?.textContent;
   if (button) {
     button.disabled = true;
@@ -128,6 +134,8 @@ async function openEmbeddedCheckout({ product, fulfillment, returnPath, button }
     }
     if (mount) mount.innerHTML = "";
 
+    const qty = normalizeQuantity(quantity);
+
     const fetchClientSecret = async () => {
       const res = await fetch("/api/create-checkout", {
         method: "POST",
@@ -135,6 +143,7 @@ async function openEmbeddedCheckout({ product, fulfillment, returnPath, button }
         body: JSON.stringify({
           product,
           fulfillment,
+          quantity: qty,
           return_path: returnPath || window.location.pathname || "/",
         }),
       });

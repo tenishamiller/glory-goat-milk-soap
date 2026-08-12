@@ -40,6 +40,10 @@ async function handleCheckoutCompleted(stripe, session) {
   const normalizedEmail = normalizeCustomerEmail(customerEmail);
   const productKey = full.metadata?.product;
   const lineItem = full.line_items?.data?.[0];
+  const quantity = Math.max(
+    1,
+    Number.parseInt(lineItem?.quantity ?? full.metadata?.quantity ?? "1", 10) || 1,
+  );
   const productName =
     lineItem?.description ||
     lineItem?.price?.product?.name ||
@@ -149,7 +153,7 @@ async function handleCheckoutCompleted(stripe, session) {
 
   if (isDbConfigured() && productKey) {
     try {
-      await decrementInventory(productKey);
+      await decrementInventory(productKey, quantity);
     } catch (err) {
       console.error("[Glory Goat webhook] inventory decrement failed", err.message);
     }
@@ -221,8 +225,10 @@ async function handleChargeRefunded(stripe, charge) {
     throw refundEventError;
   }
 
+  const restoreQty = Math.max(1, Number.parseInt(session.metadata?.quantity ?? "1", 10) || 1);
+
   try {
-    await incrementInventory(productKey);
+    await incrementInventory(productKey, restoreQty);
   } catch (err) {
     console.error("[Glory Goat webhook] inventory restore failed", err.message);
     throw err;
