@@ -56,18 +56,7 @@
           <span class="price creme-price" id="creme-price">$10.00</span>
           <p class="stock-line" data-stock-for="creme"></p>
           <label class="size-label" for="product-qty">Quantity</label>
-          <select id="product-qty" class="size-select qty-select" data-qty-for="creme" aria-label="Quantity">
-            <option value="1" selected>1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
+          <input id="product-qty" class="size-select qty-select" type="number" min="1" step="1" value="1" inputmode="numeric" data-qty-for="creme" aria-label="Quantity">
           <p class="shop-note hidden" id="order-thanks" role="status">Thank you for your order! We'll follow up about shipping soon.</p>
           <button class="btn btn-primary btn-buy" type="button" id="creme-buy">Buy Now</button>
           <div class="stock-notify hidden" data-notify-for="creme">

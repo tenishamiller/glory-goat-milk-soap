@@ -103,7 +103,7 @@ async function closeCheckoutModal() {
 function normalizeQuantity(value) {
   const n = Number.parseInt(value, 10);
   if (!Number.isFinite(n) || n < 1) return 1;
-  return Math.min(n, 20);
+  return n;
 }
 
 async function openEmbeddedCheckout({ product, fulfillment, quantity, returnPath, button }) {

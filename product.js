@@ -18,44 +18,40 @@ function activeProductKey() {
   return productKey;
 }
 
-const MAX_QTY = 10;
-
 function getFulfillment() {
   return document.getElementById("delivery-method")?.value || "ship";
 }
 
-function qtySelectFor(stockGroup) {
+function qtyInputFor(stockGroup) {
   return document.querySelector(`[data-qty-for="${stockGroup}"]`);
 }
 
 function getQuantity(stockGroup) {
-  const n = Number.parseInt(qtySelectFor(stockGroup)?.value || "1", 10);
+  const input = qtyInputFor(stockGroup);
+  const n = Number.parseInt(input?.value || "1", 10);
   if (!Number.isFinite(n) || n < 1) return 1;
-  return Math.min(n, MAX_QTY);
+  const max = Number.parseInt(input?.max || "", 10);
+  if (Number.isFinite(max) && max >= 1) return Math.min(n, max);
+  return n;
 }
 
 function syncQuantityOptions(stockGroup, state) {
-  const select = qtySelectFor(stockGroup);
-  if (!select) return;
+  const input = qtyInputFor(stockGroup);
+  if (!input) return;
 
   const curing = Boolean(state?.curing);
   const tracked = state?.inventory_count != null;
   const inStock = Boolean(state?.in_stock) && !curing;
-  let max = MAX_QTY;
-  if (tracked && state.auto_stop !== false && Number.isFinite(state.inventory_count)) {
-    max = Math.max(1, Math.min(MAX_QTY, state.inventory_count));
+
+  if (tracked && state.auto_stop !== false && Number.isFinite(state.inventory_count) && state.inventory_count > 0) {
+    input.max = String(state.inventory_count);
+    const current = Number.parseInt(input.value || "1", 10) || 1;
+    if (current > state.inventory_count) input.value = String(state.inventory_count);
+  } else {
+    input.removeAttribute("max");
   }
 
-  const current = Number.parseInt(select.value || "1", 10) || 1;
-  select.innerHTML = "";
-  for (let i = 1; i <= max; i += 1) {
-    const option = document.createElement("option");
-    option.value = String(i);
-    option.textContent = String(i);
-    if (i === Math.min(current, max)) option.selected = true;
-    select.appendChild(option);
-  }
-  select.disabled = !inStock;
+  input.disabled = !inStock;
 }
 
 async function goToCheckout(key, button, stockGroup) {

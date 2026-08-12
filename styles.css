@@ -1327,6 +1327,15 @@ main,
   cursor: not-allowed;
 }
 
+input.qty-select {
+  -moz-appearance: textfield;
+}
+
+input.qty-select::-webkit-outer-spin-button,
+input.qty-select::-webkit-inner-spin-button {
+  height: auto;
+}
+
 .btn-details {
   width: 100%;
   margin-bottom: 0.5rem;

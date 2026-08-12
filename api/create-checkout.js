@@ -48,8 +48,8 @@ export default async function handler(req, res) {
   if (!priceId) {
     return res.status(400).json({ error: "Unknown product" });
   }
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
-    return res.status(400).json({ error: "Choose a quantity between 1 and 20" });
+  if (!Number.isInteger(quantity) || quantity < 1) {
+    return res.status(400).json({ error: "Choose a quantity of at least 1" });
   }
 
   if (product === "classic_bar") {
