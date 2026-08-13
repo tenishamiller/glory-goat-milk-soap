@@ -1,0 +1,18 @@
+{
+  "name": "glory-goat-milk-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "deploy": "node deploy-to-supabase.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^16.4.7",
+    "stripe": "^22.3.2"
+  },
+  "devDependencies": {
+    "png-to-ico": "^3.0.2",
+    "sharp": "^0.35.3"
+  }
+}
